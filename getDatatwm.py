@@ -8,8 +8,8 @@ import datetime
 import re
 import time
 
-filename = './twm/diff_data_a_2.csv'
-csvname = './data/twm_full_a_' + re.search(r'\d+', filename).group() + '.csv'
+filename = './twm/twm_part_0.csv'
+csvname = './data/twm_full_' + re.search(r'\d+', filename).group() + '.csv'
 sleeptime = 7
 
 # ファイル読み取り
