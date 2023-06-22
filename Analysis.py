@@ -9,6 +9,7 @@
 """
 import pandas
 import MeCab
+import ipadic
 import numpy
 from asari.api import Sonar
 import collections
@@ -62,10 +63,11 @@ data['fmt_text'] = data['text'].str.split(
 sonar = Sonar()
 sentiment = {'negative': 'ネガティブ', 'positive': 'ポジティブ'}
 sentiment_total = {key: 0 for key in sentiment}
-mecab = MeCab.Tagger()
+mecab = MeCab.Tagger(ipadic.MECAB_ARGS)
 pos = {'noun': '名詞', 'verb': '動詞', 'adjective': '形容詞'}
 pos_total = {key: [] for key in pos}
 pos_list = []
+excluded_words = ['*', 'する', 'こと', 'おる', 'れる', 'ある', 'いる']
 
 # TODO:オブジェクト化
 for fmt_text in data['fmt_text']:
@@ -84,14 +86,16 @@ for fmt_text in data['fmt_text']:
     node = mecab.parseToNode(fmt_text)
     tmp_arr = []
 
+    # TODO:階層が深いのを修正
     while node:
         word = node.feature.split(',')
         for key, value in pos.items():
-            if word[0] == value and len(word) >= 7:
-                # 出現頻度のために[原型,原型,…]の形で挿入
-                pos_total[key].append(word[7])
-                # 共起・TF-IDFのために[[原型,原型,…],[原型,原型,…],…]の形で挿入
-                tmp_arr.append(word[7])
+            if word[0] == value and len(word) >= 6:
+                if word[6] not in excluded_words:
+                    # 出現頻度のために[原型,原型,…]の形で挿入
+                    pos_total[key].append(word[6])
+                    # 共起・TF-IDFのために[[原型,原型,…],[原型,原型,…],…]の形で挿入
+                    tmp_arr.append(word[6])
         node = node.next
 
     pos_list.append(tmp_arr)
