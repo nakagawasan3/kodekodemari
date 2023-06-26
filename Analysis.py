@@ -67,7 +67,7 @@ mecab = MeCab.Tagger(ipadic.MECAB_ARGS)
 pos = {'noun': '名詞', 'verb': '動詞', 'adjective': '形容詞'}
 pos_total = {key: [] for key in pos}
 pos_list = []
-excluded_words = ['*', 'する', 'こと', 'おる', 'れる', 'ある', 'いる']
+excluded_words = ['*', 'する', 'こと', 'おる', 'れる', 'ある', 'いる', 'てる', 'なる']
 
 # TODO:オブジェクト化
 for fmt_text in data['fmt_text']:
