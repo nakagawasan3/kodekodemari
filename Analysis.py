@@ -16,7 +16,7 @@ import collections
 import pyfpgrowth
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-name = 'test'
+name = 'kodekodemari'
 full_data = pandas.read_csv(name + '_log.csv')
 data = full_data
 
@@ -67,7 +67,9 @@ mecab = MeCab.Tagger(ipadic.MECAB_ARGS)
 pos = {'noun': '名詞', 'verb': '動詞', 'adjective': '形容詞'}
 pos_total = {key: [] for key in pos}
 pos_list = []
-excluded_words = ['*', 'する', 'こと', 'おる', 'れる', 'ある', 'いる', 'てる', 'なる']
+excluded_words = ['*', 'する', 'こと', 'おる', 'れる', 'ある', 'いる', 'てる', 'なる', 'の', 'ん']
+
+tfidf_text = []
 
 # TODO:オブジェクト化
 for fmt_text in data['fmt_text']:
@@ -99,6 +101,7 @@ for fmt_text in data['fmt_text']:
         node = node.next
 
     pos_list.append(tmp_arr)
+    tfidf_text.append(fmt_text)
 
 total.append(['ポジティブ投稿数', sentiment_total['positive']])
 total.append(['ネガティブ投稿数', sentiment_total['negative']])
@@ -150,8 +153,8 @@ for i, sentence in enumerate(sentence_list):
     for j, feature in enumerate(feature_names):
         tfidf_value = tfidf_matrix[i, j]
 
-        if tfidf_value > 0.0:
-            tfidf_data.append([feature, tfidf_value, data['fmt_text'][i]])
+        if tfidf_value > 0.0 and tfidf_value < 1.0:
+            tfidf_data.append([feature, tfidf_value, tfidf_text[i]])
 
 print('make tfidf')
 pandas.DataFrame(tfidf_data, columns=['単語', '重要度', '該当文章']).to_csv(
