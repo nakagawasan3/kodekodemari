@@ -32,7 +32,7 @@ with open(filename) as file:
         text = html.find('title').text.replace('\n', '')
         
         # created_datetimeを取得
-        status_id =  int(re.search(r'\d+', row[1]).group())
+        status_id =  int(re.search(r'^https://twitter\.com/(.*)/status/(\d+)$', row[1]).group(2))
         unix_time = ((status_id >> 22) + 1288834974657) / 1000 - 16 * 60 * 60
         created_datetime = datetime.datetime.fromtimestamp(unix_time).strftime('%Y%m%d%H%M%S')
         
