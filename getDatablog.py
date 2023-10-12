@@ -85,7 +85,7 @@ df.to_csv('./blog/url_list.csv', header=False, index=False)
 
 # snapshot_urlから情報を取得 ========
 full_data = []
-url_list_data = pandas.read_csv('./blog/url_list.csv')
+url_list_data = pandas.read_csv('./blog/url_list.csv', header=None)
 
 for index, value in url_list_data.iterrows():
     url = value[0]
@@ -105,7 +105,7 @@ for index, value in url_list_data.iterrows():
 
         # html解析
         # 詳細ページ以外の時エラー
-        if html.find('div', {'id': 'comments-list'}) == None:
+        if html.find('div', {'id': 'comment-form'}) == None:
             print('no cont err')
             driver.quit()
             continue
